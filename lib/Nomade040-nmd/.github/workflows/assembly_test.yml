@@ -1,0 +1,42 @@
+name: Test nmd_assembly.h
+
+on: 
+  push:
+    paths:
+      - 'tests/assembly_test.cpp'
+      - 'assembly/*'
+  pull_request:
+    paths:
+      - 'tests/assembly_test.cpp'
+      - 'assembly/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Install gtest
+        run: sudo apt install libgtest-dev cmake
+        
+      - name: Configure gtest
+        working-directory: /usr/src/gtest
+        run: sudo cmake CMakeLists.txt
+          
+      - name: Build gtest
+        working-directory: /usr/src/gtest
+        run: sudo make
+          
+      - name: Copy gtest libraries
+        working-directory: /usr/src/gtest
+        run: sudo cp ./lib/*.a /usr/lib
+        
+      - name: Merge files
+        working-directory: assembly
+        run: python merge_files.py
+        
+      - name: Compile assembly_test.cpp 
+        run: g++ -Wall -g -pthread tests/assembly_test.cpp -lgtest_main -lgtest -lpthread -o assembly_test
+          
+      - name: Run assembly_test
+        run: ./assembly_test

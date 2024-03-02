@@ -1,0 +1,9 @@
+apiRules:
+- exclude:
+    uidRegex: ^SDL2
+- exclude:
+    uidRegex: ^Dalamud\.Test
+- exclude:
+    uidRegex: ^Dalamud\.Interface\.Internal
+- exclude:
+    uidRegex: ^Dalamud\.Game\.Internal

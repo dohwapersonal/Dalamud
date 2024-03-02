@@ -1,0 +1,27 @@
+name: Build nmd_assembly.h C89
+
+on: 
+  push:
+    paths:
+      - 'assembly/*'
+      - 'tests/assembly_test.cpp'
+      - 'examples/assembly_example.c'
+  pull_request:
+    paths:
+      - 'assembly/*'
+      - 'tests/assembly_test.cpp'
+      - 'examples/assembly_example.c'
+      
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Merge files
+      working-directory: assembly
+      run: python merge_files.py
+      
+    - name: Build nmd_assembly.h
+      run: gcc -std=c89 examples/assembly_example.c
